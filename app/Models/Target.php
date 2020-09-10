@@ -12,5 +12,9 @@ class Target extends Model
   public function user()
   {
       return $this->belongsTo('App\Models\User');
-  } 
+  }
+  public function goals()
+  {
+      return $this->hasMany('App\Models\Goal');
+  }
 }

@@ -9,8 +9,8 @@
             <thead>
               <tr class="table-active">
               <th class="text-center" >経過時間</th>
-              <th class="text-center" >タイトル</th>
-              <th class="text-center" >詳細</th>
+              <th class="text-center" >目標</th>
+              <th class="text-center" >小目標</th>
               <th class="text-center" >達成度</th>
               </tr>
             </thead>
@@ -19,7 +19,11 @@
             <tr>
             <td class="passedTime{{ $targetsCount-($loop->iteration) }}"></td>
             <td>{{ $target->title }}</td>
-            <td>{{ $target->detail }}</td>
+            @if(isset($target->goals[0]))
+            <td>{{ $target->goals[0]->title }}</td>
+            @else
+            <td>からです</td>
+            @endif
             <td>{{ $target->archievement }}%</td>
             </tr>
             @endforeach
@@ -59,7 +63,7 @@ function htmlBuilder(localVar,counter){
       `<tr>
         <td class="passedTime${counter}"></td>
         <td>${localVar[0]['title']}</td>
-        <td>${localVar[0]['detail']}</td>
+        <td>${localVar[2]}</td>
         <td>${localVar[0]['archievement']}%</td>
        </tr>
        `
@@ -82,19 +86,20 @@ function htmlBuilder(localVar,counter){
 
       e.preventDefault();
  
-      var title = $("input[name=title]").val();
-      var detail = $("input[name=detail]").val();
-      var archievement = $("input[name=archievement]").val();
+      var title = $("input[name=targetTitle]").val();
+      var detail = $("input[name=targetDetail]").val();
+      var goal = $("input[name=goalTitle]").val();
 
       $.ajax({
          type:'POST',
          url:"{{ route('mypage.ajaxPost') }}",
          dataType:'json',
-         data:{title,detail,archievement}
+         data:{title,detail,goal}
       }).done((data)=>{
         passedTimeDom+=1;
         $(".form-control").val('');
         $('.add-data').prepend(htmlBuilder(data,passedTimeDom));
+        console.log(data);
         created_at.push(new Date());
       }).fail(()=>{
         alert('入力に不備があります');

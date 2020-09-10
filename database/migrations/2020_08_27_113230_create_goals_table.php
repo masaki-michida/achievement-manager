@@ -16,12 +16,17 @@ class CreateGoalsTable extends Migration
         Schema::create('goals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->integer('archievement');
-            $table->string('detail')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('target_id');
+
             $table->foreign('user_id')
             ->references('id')->on('users')
             ->onDelete('cascade');
+
+            $table->foreign('target_id')
+            ->references('id')->on('targets')
+            ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

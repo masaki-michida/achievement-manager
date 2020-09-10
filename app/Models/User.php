@@ -37,9 +37,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function goal()
+    public function goals()
     {
-        return $this->hasOne('App\Models\Goal');
+        return $this->hasMany('App\Models\Goal');
     }
 
     public function targets()
