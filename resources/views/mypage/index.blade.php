@@ -37,7 +37,8 @@
 </body>
 <script>
 
-$(".data-table").DataTable();
+var table = $(".data-table")
+var datatable = table.DataTable();
 
 var created_at = @json($created_at);
 var passedTimeDom = @json($targetsCount)-1;
