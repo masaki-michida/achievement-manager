@@ -8,6 +8,7 @@
             <table class="data-table text-nowrap table text-center table-hover table-bordered" >
             <thead>
               <tr class="table-active">
+              <th class="text-center" >番号</th>
               <th class="text-center" >経過時間</th>
               <th class="text-center" >目標</th>
               <th class="text-center" >小目標</th>
@@ -17,6 +18,7 @@
             <tbody class="add-data">
             @foreach($targets as $target)
             <tr>
+            <td>{{ $targetsCount-($loop->iteration) }}</td>
             <td class="passedTime{{ $targetsCount-($loop->iteration) }}"></td>
             <td>{{ $target->title }}</td>
             @if(isset($target->goals[0]))
@@ -37,8 +39,14 @@
 </body>
 <script>
 
-var table = $(".data-table")
-var datatable = table.DataTable();
+var datatable = $(".data-table").DataTable({
+  "order": [[0,'desc']],
+  "createdRow": function( row, data, dataIndex ) {
+    if(data[0]==passedTimeDom){
+    $(row).find("td").eq(1).addClass(`passedTime${passedTimeDom}`);
+    }
+  }
+});
 
 var created_at = @json($created_at);
 var passedTimeDom = @json($targetsCount)-1;
@@ -58,19 +66,7 @@ setInterval(()=>{
   }
 )},1000)
 
-function htmlBuilder(localVar,counter){
-
-  var html = 
-      `<tr>
-        <td class="passedTime${counter}"></td>
-        <td>${localVar[0]['title']}</td>
-        <td>${localVar[2]}</td>
-        <td>${localVar[0]['archievement']}%</td>
-       </tr>
-       `
-      return html
-}
-
+// この関数なんで作ったんだっけ？
   function passedTime(postedTime,counter) {
     var nowTime = new Date().getTime();
     var passedTime = nowTime - postedTime
@@ -99,8 +95,13 @@ function htmlBuilder(localVar,counter){
       }).done((data)=>{
         passedTimeDom+=1;
         $(".form-control").val('');
-        $('.add-data').prepend(htmlBuilder(data,passedTimeDom));
-        console.log(data);
+        var newRow = $('.data-table').DataTable().row.add([
+          passedTimeDom,
+          null,
+          data[0]['title'],
+          data[2],
+          `${data[0]['archievement']}%`
+        ]).draw();
         created_at.push(new Date());
       }).fail(()=>{
         alert('入力に不備があります');
