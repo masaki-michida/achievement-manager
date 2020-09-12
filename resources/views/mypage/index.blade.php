@@ -42,7 +42,7 @@
 var datatable = $(".data-table").DataTable({
   "order": [[0,'desc']],
   "createdRow": function( row, data, dataIndex ) {
-    if(data[0]==passedTimeDom){
+    if(dataIndex==passedTimeDom){
     $(row).find("td").eq(1).addClass(`passedTime${passedTimeDom}`);
     }
   }
@@ -65,13 +65,6 @@ setInterval(()=>{
   passedTimeDom-=1;
   }
 )},1000)
-
-// この関数なんで作ったんだっけ？
-  function passedTime(postedTime,counter) {
-    var nowTime = new Date().getTime();
-    var passedTime = nowTime - postedTime
-    $(`.passedTime${counter}`).html(passedTime);
-  }
 
   $.ajaxSetup({
       headers: {
