@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Target;
 use App\Models\Goal;
-use Carbon\Carbon;
 
 class MypageController extends Controller
 {
@@ -23,23 +22,29 @@ class MypageController extends Controller
     }
 
     public function ajaxRequestPost(Request $request){
-        $target = new Target();
-        $goal = new Goal();
 
-        $target->title = $request->title;
-        $target->detail = $request->detail;
+
+        
+        $target = new Target();
+        $target->title = $request['title'];
+        $target->detail = $request['detail'];
         $target->archievement = 0;
         $target-> user_id = 1;
         $target->save();
 
-        $goal->title = $request->goal;
+        $latestGoals = [];
+        foreach($request['goal'] as $oneOfGoals){
+        $goal = new Goal();
+        $goal->title = $oneOfGoals;
         $goal->user_id = 1;
         $goal->target_id = $target->id;
         $goal->save();
+        $latestGoals[] = $goal;
+        }
 
         $latestTarget = Target::orderByDesc('created_at')->first();
         $latestTargetTime = $latestTarget->created_at;
 
-        return response()->json([$latestTarget,$latestTargetTime,$goal->title]);
+        return response()->json([$latestTarget,$latestTargetTime,$latestGoals]);
     }
 }

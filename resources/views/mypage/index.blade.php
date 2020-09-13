@@ -17,7 +17,7 @@
             </thead>
             <tbody class="add-data">
             @foreach($targets as $target)
-            <tr>
+            <tr data-toggle="modal" data-target="#form-modal">
             <td>{{ $targetsCount-($loop->iteration) }}</td>
             <td class="passedTime{{ $targetsCount-($loop->iteration) }}"></td>
             <td>{{ $target->title }}</td>
@@ -32,7 +32,7 @@
             </tbody>
             </table>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form-modal">
           目標を立てる
     </button>
     @include('template/mordal')
@@ -43,6 +43,7 @@ var datatable = $(".data-table").DataTable({
   "order": [[0,'desc']],
   "createdRow": function( row, data, dataIndex ) {
     if(dataIndex==passedTimeDom){
+    $(row).attr("data-toggle","modal").attr("data-target","#form-modal");
     $(row).find("td").eq(1).addClass(`passedTime${passedTimeDom}`);
     }
   }
@@ -78,13 +79,19 @@ setInterval(()=>{
  
       var title = $("input[name=targetTitle]").val();
       var detail = $("input[name=targetDetail]").val();
-      var goal = $("input[name=goalTitle]").val();
-
+      var goal = [];
+      for(var i=0; i<=addInputCounter; i++){
+      goal.push($(`input[name="goalTitle[${i}]"]`).val());
+      }
       $.ajax({
          type:'POST',
          url:"{{ route('mypage.ajaxPost') }}",
          dataType:'json',
-         data:{title,detail,goal}
+         data: {
+           title:title,
+           detail:detail,
+           goal:goal
+         }
       }).done((data)=>{
         passedTimeDom+=1;
         $(".form-control").val('');
