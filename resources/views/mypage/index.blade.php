@@ -5,28 +5,35 @@
 <body>
     <div class="container">
         <h1>Your Page</h1>
-            <table class="data-table text-nowrap table text-center table-hover table-bordered" >
-            <thead>
+            <table class="data-table text-nowrap table table-hover table-bordered" >
+            <thead class="text-center">
               <tr class="table-active">
-              <th class="text-center" >番号</th>
-              <th class="text-center" >経過時間</th>
-              <th class="text-center" >目標</th>
-              <th class="text-center" >小目標</th>
-              <th class="text-center" >達成度</th>
+              <th>番号</th>
+              <th>経過時間</th>
+              <th>目標</th>
+              <th>小目標</th>
+              <th>達成度</th>
               </tr>
             </thead>
             <tbody class="add-data">
             @foreach($targets as $target)
-            <tr data-toggle="modal" data-target="#form-modal">
-            <td>{{ $targetsCount-($loop->iteration) }}</td>
-            <td class="passedTime{{ $targetsCount-($loop->iteration) }}"></td>
-            <td>{{ $target->title }}</td>
+            <tr>
+            <td class="text-center">{{ $targetsCount-($loop->iteration) }}</td>
+            <td class="passedTime{{ $targetsCount-($loop->iteration) }} text-center"></td>
+            <td class="text-center">{{ $target->title }}</td>
             @if(isset($target->goals[0]))
-            <td>{{ $target->goals[0]->title }}</td>
+            <td>
+              @foreach($target->goals as $goalList)
+              <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="check1a">
+              <label class="form-check-label" for="check1a">{{ $goalList->title }}</label>
+              </div>
+              @endforeach
+            </td>
             @else
             <td>からです</td>
             @endif
-            <td>{{ $target->archievement }}%</td>
+            <td class="text-center">{{ $target->archievement }}%</td>
             </tr>
             @endforeach
             </tbody>
@@ -41,12 +48,26 @@
 
 var datatable = $(".data-table").DataTable({
   "order": [[0,'desc']],
+  destroy:true,
+  language: {
+         url: "https://cdn.datatables.net/plug-ins/3cfcc339e89/i18n/Japanese.json"
+       },
   "createdRow": function( row, data, dataIndex ) {
     if(dataIndex==passedTimeDom){
-    $(row).attr("data-toggle","modal").attr("data-target","#form-modal");
-    $(row).find("td").eq(1).addClass(`passedTime${passedTimeDom}`);
+      $(row).find("td").eq(0).addClass('text-center');
+      $(row).find("td").eq(1).addClass(`passedTime${passedTimeDom}`).addClass('text-center');
+      $(row).find("td").eq(2).addClass('text-center');
+      $(row).find("td").eq(4).addClass('text-center');
+      
     }
-  }
+  },
+  columnDefs: [
+        { "targets": 0, "name": "number", "title": "番号", "data": 0}, 
+        { "targets": 1, "name": "passedTime", "title": "経過時間", "data": 1},  
+        { "targets": 2, "name": "target", "title": "目標", "data": 2 },   
+        { "targets": 3, "name": "goals", "title": "小目標", "data": 3,},   
+        { "targets": 4, "name": "archievement", "title": "達成率", "data": 4}    
+    ]
 });
 
 var created_at = @json($created_at);
@@ -95,11 +116,20 @@ setInterval(()=>{
       }).done((data)=>{
         passedTimeDom+=1;
         $(".form-control").val('');
+        buildedHtml = [];
+        data[2].forEach((val)=>{
+          var html = `<div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="check1a">
+                        <label class="form-check-label" for="check1a">${val['title']}</label>
+                      </div>
+                     `
+           buildedHtml.push(html);
+        });
         var newRow = $('.data-table').DataTable().row.add([
           passedTimeDom,
           null,
           data[0]['title'],
-          data[2],
+           buildedHtml.join(""),
           `${data[0]['archievement']}%`
         ]).draw();
         created_at.push(new Date());
