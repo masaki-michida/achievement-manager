@@ -16,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('mypage','MypageController');
+Route::get('mypage','MypageController@index');
 Route::post('mypage','MypageController@ajaxRequestPost')->name('mypage.ajaxPost');
-
-Route::get('ajaxRequest','AjaxController@ajaxRequest');
-Route::post('ajaxRequest', 'AjaxController@ajaxRequestPost')->name('ajaxRequest.post');
-
+Route::put('mypage','MypageController@ajaxCheckBox')->name('mypage.ajaxCheckBox');
+Route::delete('mypage','MypageController@ajaxRequestDelete')->name('mypage.ajaxDelete');

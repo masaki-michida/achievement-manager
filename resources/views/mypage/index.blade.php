@@ -8,14 +8,14 @@
             <table class="data-table text-nowrap table table-hover table-bordered" >
             <thead class="text-center">
               <tr class="table-active">
-              <th>番号</th>
-              <th>経過時間</th>
-              <th>目標</th>
-              <th>小目標</th>
-              <th>達成度</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
               </tr>
             </thead>
-            <tbody class="add-data">
+            <tbody>
             @foreach($targets as $target)
             <tr>
             <td class="text-center">{{ $targetsCount-($loop->iteration) }}</td>
@@ -25,8 +25,12 @@
             <td>
               @foreach($target->goals as $goalList)
               <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check1a">
-              <label class="form-check-label" for="check1a">{{ $goalList->title }}</label>
+              @if($goalList->checked==1)
+              <input class="form-check-input" checked='checked' type="checkbox" data-id="{{ $goalList->id }}" id="checkbox{{ $goalList->id }}" >
+              @else
+              <input class="form-check-input" type="checkbox" data-id="{{ $goalList->id }}" id="checkbox{{ $goalList->id }}" >
+              @endif
+              <label class="form-check-label" for="checkbox{{ $goalList->id }}">{{ $goalList->title }}</label>
               </div>
               @endforeach
             </td>
@@ -97,7 +101,7 @@ setInterval(()=>{
   $(".btn-submit").click(function(e){
 
       e.preventDefault();
- 
+
       var title = $("input[name=targetTitle]").val();
       var detail = $("input[name=targetDetail]").val();
       var goal = [];
@@ -119,24 +123,38 @@ setInterval(()=>{
         buildedHtml = [];
         data[2].forEach((val)=>{
           var html = `<div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="check1a">
-                        <label class="form-check-label" for="check1a">${val['title']}</label>
+                        <input class="form-check-input" type="checkbox" data-id=${val['id']} id="checkbox${val['id']}">
+                        <label class="form-check-label" for="checkbox${val['id']}">${val['title']}</label>
                       </div>
                      `
            buildedHtml.push(html);
         });
-        var newRow = $('.data-table').DataTable().row.add([
-          passedTimeDom,
-          null,
-          data[0]['title'],
-           buildedHtml.join(""),
+        var newRow = datatable.row.add([
+            passedTimeDom,
+            null,
+            data[0]['title'],
+            buildedHtml.join(""),
           `${data[0]['archievement']}%`
         ]).draw();
         created_at.push(new Date());
       }).fail(()=>{
         alert('入力に不備があります');
       })
-});
+  });
+
+  $('table').on('change',".form-check-input",(e)=>{
+    var changeBoxId = $(e.target).data('id');
+    $.ajax({
+      type:'PUT',
+      url:"{{ route('mypage.ajaxCheckBox') }}",
+      dataType:'json',
+      data: {id: changeBoxId}
+    }).done((data)=>{
+      var tasseido = Math.floor(data['archievement']);
+      var archievementCell = $(e.target).parent().parent().next();
+      datatable.cell(archievementCell).data(tasseido+'%');
+    })
+  })
 </script>
 </html>
 @endsection

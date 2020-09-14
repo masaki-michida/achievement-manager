@@ -23,8 +23,6 @@ class MypageController extends Controller
 
     public function ajaxRequestPost(Request $request){
 
-
-        
         $target = new Target();
         $target->title = $request['title'];
         $target->detail = $request['detail'];
@@ -36,6 +34,7 @@ class MypageController extends Controller
         foreach($request['goal'] as $oneOfGoals){
         $goal = new Goal();
         $goal->title = $oneOfGoals;
+        $goal->checked = 0;
         $goal->user_id = 1;
         $goal->target_id = $target->id;
         $goal->save();
@@ -46,5 +45,21 @@ class MypageController extends Controller
         $latestTargetTime = $latestTarget->created_at;
 
         return response()->json([$latestTarget,$latestTargetTime,$latestGoals]);
+    }
+    public function ajaxCheckBox(Request $request){
+
+        $id = $request['id'];
+        $goal = Goal::find($id);
+        $goal->checked=$goal->checked==0 ? 1: 0;
+        $goal->update();
+
+        $targetId = $goal->target_id;
+        $target = Target::find($targetId);
+        $countGoals = Target::with('goals')->find($targetId)->goals->count();
+        $checkedGoals = Target::with('goals')->find($targetId)->goals->where('checked',1)->count();
+        $target->archievement = 100*$checkedGoals/$countGoals;
+        $target->update();
+        
+        return response()->json($target);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Goal extends Model
 {
 
-    protected $fillable = ['title','target_id','user_id'];
+    protected $fillable = ['title','checked','target_id','user_id'];
 
     public function user()
     {
