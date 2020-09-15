@@ -36,9 +36,13 @@
             </td>
             <td class="text-center">
               @if($target->archievement==100)
-                <button type="button" class="btn btn-primary">
-                  完了
+                <form action="/mypage/compTarget/{{ $target->id }}" method="post">
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-primary btn-comp-target">
+                      完了
                 </button>
+              </form>
               @else
                 {{ $target->archievement }}%
               @endif
@@ -83,6 +87,8 @@ var datatable = $(".data-table").DataTable({
 var created_at = @json($created_at);
 var passedTimeDom = @json($targetsCount)-1;
 
+console.log(created_at);
+
 setInterval(()=>{
   created_at.forEach((val,passedTimeDom)=>{
   var create_time = new Date(val).getTime();
@@ -104,7 +110,7 @@ setInterval(()=>{
       }
   });
 
-  $(".btn-submit").click(function(e){
+  $(".btn-submit-new-post").click(function(e){
 
       e.preventDefault();
 
@@ -142,7 +148,8 @@ setInterval(()=>{
             buildedHtml.join(""),
           `${data[0]['archievement']}%`
         ]).draw();
-        created_at.push(new Date());
+        created_at.push(data[0]['created_at']);
+        console.log(created_at);
       }).fail(()=>{
         alert('入力に不備があります');
       })
@@ -157,14 +164,20 @@ setInterval(()=>{
       data: {id: changeBoxId}
     }).done((data)=>{
       var progress = Math.floor(data[0]['archievement']);
-      var button = `<button type="button" class="btn btn-primary">
+      var button = `
+                    <form action="/mypage/compTarget/${data[0]['id']}" method="post">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-primary btn-comp-target">
                       完了
-                    </button>`
+                    </button>
+                    </form>`
       var tasseido = progress !=100 ? progress+'%': button;
       var archievementCell = $(e.target).parent().parent().next();
       datatable.cell(archievementCell).data(tasseido);
     })
   })
+  
 </script>
 </html>
 @endsection

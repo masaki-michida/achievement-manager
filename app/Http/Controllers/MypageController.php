@@ -15,8 +15,8 @@ class MypageController extends Controller
         $newGoal = new Goal();
 
         $users = User::all();
-        $targets = Target::with('goals')->orderByDesc('created_at')->get();
-        $created_at = Target::pluck('created_at');
+        $targets = Target::with('goals')->orderByDesc('created_at')->where('complete',0)->get();
+        $created_at = Target::where('complete',0)->pluck('created_at');
         $targetsCount = $targets->count();
         return view('mypage/index',compact('users','newTarget','targets','created_at','targetsCount','newGoal'));
     }
@@ -66,9 +66,10 @@ class MypageController extends Controller
         return response()->json([$target]);
     }
 
-    public function ajaxCompTarget(Request $request){
-        $target = Target::find($request['id']);
+    public function ajaxCompTarget(Request $request,$id){
+        $target = Target::find($id);
         $target->complete = 1;
         $target->update();
+        return redirect("/mypage");
     }
 }

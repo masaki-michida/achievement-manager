@@ -12,7 +12,7 @@
       </div>
       <div class="modal-footer form-group">
              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button type="button" class="btn btn-primary btn-submit" data-dismiss="modal">Save changes</button>
+             <button type="button" class="btn btn-primary btn-submit btn-submit-new-post" data-dismiss="modal">Save changes</button>
       </div>
     </div>
   </div>

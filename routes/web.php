@@ -19,5 +19,5 @@ Route::get('/', function () {
 Route::get('mypage','MypageController@index');
 Route::post('mypage','MypageController@ajaxRequestPost')->name('mypage.ajaxPost');
 Route::put('mypage/checkBox',['as'=>'mypage.ajaxCheckBox','uses'=>'MypageController@ajaxCheckBox']);
-Route::put('mypage/compTarget',['as'=>'mypage.ajaxCompTarget','uses'=>'MypageController@ajaxCompTarget']);
+Route::put('mypage/compTarget/{mypage}',['as'=>'mypage.ajaxCompTarget','uses'=>'MypageController@ajaxCompTarget']);
 Route::delete('mypage','MypageController@ajaxRequestDelete')->name('mypage.ajaxDelete');
