@@ -17,11 +17,11 @@
             </thead>
             <tbody>
             @foreach($targets as $target)
+            @if($target->complete==0)
             <tr>
             <td class="text-center">{{ $targetsCount-($loop->iteration) }}</td>
             <td class="passedTime{{ $targetsCount-($loop->iteration) }} text-center"></td>
             <td class="text-center">{{ $target->title }}</td>
-            @if(isset($target->goals[0]))
             <td>
               @foreach($target->goals as $goalList)
               <div class="form-check">
@@ -34,11 +34,17 @@
               </div>
               @endforeach
             </td>
-            @else
-            <td>からです</td>
-            @endif
-            <td class="text-center">{{ $target->archievement }}%</td>
+            <td class="text-center">
+              @if($target->archievement==100)
+                <button type="button" class="btn btn-primary">
+                  完了
+                </button>
+              @else
+                {{ $target->archievement }}%
+              @endif
+            </td>
             </tr>
+            @endif
             @endforeach
             </tbody>
             </table>
@@ -87,7 +93,7 @@ setInterval(()=>{
   var passedMinutes = Math.floor(passedTime2/(1000 * 60));
   var passedSeconds = Math.floor(passedTime2/1000);
   var timeTemplate = `${passedDay}日:${passedHour-(passedDay*24)}時間:${passedMinutes-(passedHour*60)}分:${passedSeconds-(passedMinutes*60)}秒`;
-  $(`.passedTime${passedTimeDom}`).html(timeTemplate);
+  datatable.cell($(`.passedTime${passedTimeDom}`)).data(timeTemplate);
   passedTimeDom-=1;
   }
 )},1000)
@@ -150,9 +156,13 @@ setInterval(()=>{
       dataType:'json',
       data: {id: changeBoxId}
     }).done((data)=>{
-      var tasseido = Math.floor(data['archievement']);
+      var progress = Math.floor(data[0]['archievement']);
+      var button = `<button type="button" class="btn btn-primary">
+                      完了
+                    </button>`
+      var tasseido = progress !=100 ? progress+'%': button;
       var archievementCell = $(e.target).parent().parent().next();
-      datatable.cell(archievementCell).data(tasseido+'%');
+      datatable.cell(archievementCell).data(tasseido);
     })
   })
 </script>

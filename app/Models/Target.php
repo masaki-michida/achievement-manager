@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Target extends Model
 {
 
-  protected $fillable = ['title',' archievement','detail','user_id'];
+  protected $fillable = ['title','archievement','confirmation','complete','detail','user_id'];
 
   public function user()
   {

@@ -16,7 +16,7 @@ class CreateGoalsTable extends Migration
         Schema::create('goals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->integer('checked');
+            $table->boolean('checked');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('target_id');
 

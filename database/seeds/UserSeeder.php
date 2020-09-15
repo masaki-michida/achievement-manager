@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Goal;
+use App\Models\Target;
+use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
@@ -11,10 +15,20 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name' => Str::random(10),
-            'email' => Str::random(10).'@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;'); 
+        Goal::truncate();
+        Target::truncate();
+        User::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;'); 
+
+        $faker = Faker::create('ja_JP');
+
+        for($i = 0; $i < 10; $i++){
+            User::create([
+                'name' => $faker->name,
+                'email' => $faker->email,
+                'password' => Hash::make('testtest')
+            ]);
+        }
     }
 }

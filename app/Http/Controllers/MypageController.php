@@ -16,7 +16,7 @@ class MypageController extends Controller
 
         $users = User::all();
         $targets = Target::with('goals')->orderByDesc('created_at')->get();
-        $created_at = Target::pluck('created_at')->toArray();
+        $created_at = Target::pluck('created_at');
         $targetsCount = $targets->count();
         return view('mypage/index',compact('users','newTarget','targets','created_at','targetsCount','newGoal'));
     }
@@ -27,6 +27,8 @@ class MypageController extends Controller
         $target->title = $request['title'];
         $target->detail = $request['detail'];
         $target->archievement = 0;
+        $target->confirmation = 0;
+        $target->complete = 0;
         $target-> user_id = 1;
         $target->save();
 
@@ -50,16 +52,23 @@ class MypageController extends Controller
 
         $id = $request['id'];
         $goal = Goal::find($id);
-        $goal->checked=$goal->checked==0 ? 1: 0;
+        $goal->checked=$goal->checked==0 ? 1:0;
         $goal->update();
 
         $targetId = $goal->target_id;
         $target = Target::find($targetId);
-        $countGoals = Target::with('goals')->find($targetId)->goals->count();
+        $allGoals = Target::with('goals')->find($targetId)->goals->count();
         $checkedGoals = Target::with('goals')->find($targetId)->goals->where('checked',1)->count();
-        $target->archievement = 100*$checkedGoals/$countGoals;
+        $target->archievement = 100*$checkedGoals/$allGoals;
+        $target->confirmation = $target->archievement==100 ? 1:0;
         $target->update();
-        
-        return response()->json($target);
+
+        return response()->json([$target]);
+    }
+
+    public function ajaxCompTarget(Request $request){
+        $target = Target::find($request['id']);
+        $target->complete = 1;
+        $target->update();
     }
 }

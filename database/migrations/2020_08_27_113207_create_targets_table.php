@@ -18,6 +18,8 @@ class CreateTargetsTable extends Migration
             $table->string('title');
             $table->string('detail')->nullable();
             $table->integer('archievement');
+            $table->boolean('confirmation');
+            $table->boolean('complete');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
             ->references('id')->on('users')
