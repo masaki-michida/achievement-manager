@@ -39,7 +39,7 @@ class herokuDB extends Command
     {
         echo exec('heroku config:set DB_HOST=us-cdbr-east-02.cleardb.com');
         echo exec('heroku config:set DB_DATABASE=heroku_5551255eedaa227');
-        echo exec('heroku config:set DB_USERNAME=[b63ea54c55b600]');
-        echo exec('heroku config:set DB_PASSWORD=[bf5c08f0]');
+        echo exec('heroku config:set DB_USERNAME=b63ea54c55b600');
+        echo exec('heroku config:set DB_PASSWORD=bf5c08f0');
     }
 }
