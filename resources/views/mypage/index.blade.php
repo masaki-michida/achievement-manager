@@ -2,9 +2,9 @@
 @section('content')
 <!DOCTYPE html>
 <html>
-<body>
+<body style="overflow-x:hidden;">
     <div class="container">
-            <table class="data-table text-nowrap table table-hover table-bordered" >
+            <table class="data-table text-nowrap table table-hover table-bordered" style="width:100%">
             <thead class="text-center bg-primary text-white">
               <tr class="table-active">
               <th></th>
@@ -62,6 +62,8 @@
 <script>
 
 var datatable = $(".data-table").DataTable({
+  responsive: true,
+  scrollX:true,
   "order": [[0,'desc']],
   destroy:true,
   language: {
