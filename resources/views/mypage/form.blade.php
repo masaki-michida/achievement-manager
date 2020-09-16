@@ -41,7 +41,10 @@ $('.add-new-goal').on('click',(e)=>{
 
 $('.delete-goal').on('click',(e)=>{
     e.preventDefault();
+    if(addInputCounter != 1){
     addInputCounter -= 1;
     $(`.addedGoal${addInputCounter}`).remove();
-})
+    }
+});
+
 </script>

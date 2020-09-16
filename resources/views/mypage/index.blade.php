@@ -4,9 +4,8 @@
 <html>
 <body>
     <div class="container">
-        <h1>Your Page</h1>
             <table class="data-table text-nowrap table table-hover table-bordered" >
-            <thead class="text-center">
+            <thead class="text-center bg-primary text-white">
               <tr class="table-active">
               <th></th>
               <th></th>
@@ -39,7 +38,7 @@
                 <form action="/mypage/compTarget/{{ $target->id }}" method="post">
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <button type="submit" class="btn btn-primary btn-comp-target">
+                <button type="submit" class="btn btn-success btn-comp-target">
                       完了
                 </button>
               </form>
@@ -53,9 +52,11 @@
             </tbody>
             </table>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form-modal">
-          目標を立てる
-    </button>
+      <div class="text-center">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form-modal">
+            目標を立てる
+      </button>
+      </div>
     @include('template/mordal')
 </body>
 <script>
@@ -86,8 +87,6 @@ var datatable = $(".data-table").DataTable({
 
 var created_at = @json($created_at);
 var passedTimeDom = @json($targetsCount)-1;
-
-console.log(created_at);
 
 setInterval(()=>{
   created_at.forEach((val,passedTimeDom)=>{
@@ -140,6 +139,12 @@ setInterval(()=>{
                       </div>
                      `
            buildedHtml.push(html);
+           
+          while(addInputCounter>0){
+            $(`.addedGoal${addInputCounter}`).remove();
+            addInputCounter -= 1;
+          }
+          addInputCounter = 1;
         });
         var newRow = datatable.row.add([
             passedTimeDom,
@@ -149,7 +154,6 @@ setInterval(()=>{
           `${data[0]['archievement']}%`
         ]).draw();
         created_at.push(data[0]['created_at']);
-        console.log(created_at);
       }).fail(()=>{
         alert('入力に不備があります');
       })
@@ -168,7 +172,7 @@ setInterval(()=>{
                     <form action="/mypage/compTarget/${data[0]['id']}" method="post">
                     <input type="hidden" name="_method" value="PUT">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <button type="submit" class="btn btn-primary btn-comp-target">
+                    <button type="submit" class="btn btn-success btn-comp-target">
                       完了
                     </button>
                     </form>`

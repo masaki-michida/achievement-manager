@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Target;
 use App\Models\Goal;
+use Illuminate\Support\Facades\Auth;
 
 class MypageController extends Controller
 {
@@ -13,23 +14,25 @@ class MypageController extends Controller
     public function index(){
         $newTarget = new Target();
         $newGoal = new Goal();
+        $user = Auth::user()->id;
 
-        $users = User::all();
-        $targets = Target::with('goals')->orderByDesc('created_at')->where('complete',0)->get();
-        $created_at = Target::where('complete',0)->pluck('created_at');
+        $targets = Target::with('goals')->where('user_id',$user)->orderByDesc('created_at')->where('complete',0)->get();
+        $created_at = Target::where('user_id',$user)->where('complete',0)->pluck('created_at');
         $targetsCount = $targets->count();
-        return view('mypage/index',compact('users','newTarget','targets','created_at','targetsCount','newGoal'));
+        return view('mypage/index',compact('newTarget','targets','created_at','targetsCount','newGoal'));
     }
 
     public function ajaxRequestPost(Request $request){
 
         $target = new Target();
+        $user = Auth::user()->id;
+
         $target->title = $request['title'];
         $target->detail = $request['detail'];
         $target->archievement = 0;
         $target->confirmation = 0;
         $target->complete = 0;
-        $target-> user_id = 1;
+        $target-> user_id = $user;
         $target->save();
 
         $latestGoals = [];
@@ -37,7 +40,7 @@ class MypageController extends Controller
         $goal = new Goal();
         $goal->title = $oneOfGoals;
         $goal->checked = 0;
-        $goal->user_id = 1;
+        $goal->user_id = $user;
         $goal->target_id = $target->id;
         $goal->save();
         $latestGoals[] = $goal;
