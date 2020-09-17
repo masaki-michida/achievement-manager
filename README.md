@@ -5,7 +5,7 @@
 
 テスト用アカウント<br>
 emailアドレス:test@test<br>
-パスワード:tttttttt<br>
+パスワード:tttttttt(tを8回)<br>
 
 デモページへ飛びます。<br>
 http://passtimetodo.herokuapp.com/
