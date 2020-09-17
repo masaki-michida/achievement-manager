@@ -59,10 +59,10 @@ class MypageController extends Controller
         $goal->update();
 
         $targetId = $goal->target_id;
-        $target = Target::find($targetId);
-        $allGoals = Target::with('goals')->find($targetId)->goals->count();
-        $checkedGoals = Target::with('goals')->find($targetId)->goals->where('checked',1)->count();
-        $target->archievement = 100*$checkedGoals/$allGoals;
+        $target = Target::with('goals')->find($targetId);
+        $allGoals = $target->goals->count();
+        $checkedGoals = $target->goals->where('checked',1)->count();
+        $target->archievement = floor(100*$checkedGoals/$allGoals);
         $target->confirmation = $target->archievement==100 ? 1:0;
         $target->update();
 
