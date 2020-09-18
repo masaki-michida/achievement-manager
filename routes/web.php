@@ -20,10 +20,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::group(['middleware' => 'auth'], function(){
     Route::get('mypage','MypageController@index')->name('mypage');
-    Route::post('mypage','MypageController@ajaxRequestPost')->name('mypage.ajaxPost');
-    Route::put('mypage/checkBox',['as'=>'mypage.ajaxCheckBox','uses'=>'MypageController@ajaxCheckBox']);
-    Route::put('mypage/compTarget/{mypage}',['as'=>'mypage.ajaxCompTarget','uses'=>'MypageController@ajaxCompTarget']);
-    Route::delete('mypage','MypageController@ajaxRequestDelete')->name('mypage.ajaxDelete');
 });
+
+Route::put('mypage/compTarget/{mypage}',['as'=>'mypage.ajaxCompTarget','uses'=>'MypageController@ajaxCompTarget']);
+Route::post('mypage','MypageController@ajaxRequestPost')->name('mypage.ajaxPost');
+Route::delete('mypage','MypageController@ajaxRequestDelete')->name('mypage.ajaxDelete');
+Route::put('mypage/checkBox',['as'=>'mypage.ajaxCheckBox','uses'=>'MypageController@ajaxCheckBox']);
