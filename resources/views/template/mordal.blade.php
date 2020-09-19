@@ -23,5 +23,7 @@
     }
     addInputCounter = 1;
       $('.form-control').val('');
+      $('.error-title').text('');
+      $('.error-goal').text('');
   })
 </script>
