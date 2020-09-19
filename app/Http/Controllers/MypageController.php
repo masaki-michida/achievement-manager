@@ -24,6 +24,15 @@ class MypageController extends Controller
 
     public function ajaxRequestPost(Request $request){
 
+        $validatedData = $request->validate([
+            'title' => ['required','max:20'],
+            'goal.*' =>['required','max:20'],
+        ],
+        [
+            'required' => '必須入力です',
+            'max' => '20文字以内で入力してください'
+        ]);
+
         $target = new Target();
         $user = Auth::user()->id;
 
@@ -46,10 +55,9 @@ class MypageController extends Controller
         $latestGoals[] = $goal;
         }
 
-        $latestTarget = Target::orderByDesc('created_at')->first();
-        $latestTargetTime = $latestTarget->created_at;
+        $latestTargetTime = $target->created_at;
 
-        return response()->json([$latestTarget,$latestTargetTime,$latestGoals]);
+        return response()->json([$target,$latestTargetTime,$latestGoals]);
     }
     public function ajaxCheckBox(Request $request){
 
