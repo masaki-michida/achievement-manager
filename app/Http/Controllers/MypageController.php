@@ -24,12 +24,18 @@ class MypageController extends Controller
 
     public function ajaxRequestPost(Request $request){
 
+        $nullCounter = count($request['goal'],null);
+        $notNull = count($request['goal']) - $nullCounter;
+
+        $request['goal'] = ($nullCounter > 1)&&($notNull > 1) ? array_filter($request['goal']): $request['goal'];
+
         $validatedData = $request->validate([
             'title' => ['required','max:20'],
             'goal.*' =>['required','max:20'],
         ],
         [
             'required' => '必須入力です',
+            'goal.*.required' => '一つ以上入力してください',
             'max' => '20文字以内で入力してください'
         ]);
 
