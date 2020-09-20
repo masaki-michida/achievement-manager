@@ -17,9 +17,9 @@ class MypageController extends Controller
         $user = Auth::user()->id;
 
         $targets = Target::with('goals')->where('user_id',$user)->orderByDesc('created_at')->where('complete',0)->get();
-        $created_at = Target::where('user_id',$user)->where('complete',0)->pluck('created_at');
         $targetsCount = $targets->count();
-        return view('mypage/index',compact('newTarget','targets','created_at','targetsCount','newGoal'));
+        
+        return view('mypage/index',compact('newTarget','targets','targetsCount','newGoal'));
     }
 
     public function ajaxRequestPost(Request $request){
