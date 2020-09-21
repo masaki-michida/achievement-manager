@@ -10,9 +10,6 @@
   <script src="//cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <style>
-    
-  </style>
 </head>
 <body>
     <div id="app">
