@@ -1,8 +1,8 @@
 @extends('mypage/layout')
 @section('content')
 <!DOCTYPE html>
-<html>
 <body>
+<html>
     <div class="container">
             <table class="data-table text-nowrap table table-hover table-bordered" style="width:100%">
             <thead class="text-center bg-primary text-white">
@@ -58,7 +58,7 @@
       </button>
       </div>
     @include('template/mordal')
-</body>
+</html>
 <script>
 
 const errorRedirect = (status,codes=[500,419,405])=>{
@@ -203,7 +203,7 @@ setTimeout(() => {
       errorRedirect(response.status);
     })
   })
-  
+
 </script>
-</html>
+</body>
 @endsection
