@@ -24,10 +24,6 @@ class MypageController extends Controller
 
     public function ajaxRequestPost(Request $request){
 
-        $nullCounter = count($request['goal'],null);
-        $notNull = count($request['goal']) - $nullCounter;
-
-        $request['goal'] = ($nullCounter > 1)&&($notNull > 1) ? array_filter($request['goal']): $request['goal'];
 
         $validatedData = $request->validate([
             'title' => ['required','max:20'],
