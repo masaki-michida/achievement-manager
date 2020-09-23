@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'メールアドレスが存在しません',
+    'failed' => '入力に不備があります',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];
