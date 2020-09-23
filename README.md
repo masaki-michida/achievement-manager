@@ -19,8 +19,8 @@
 
 ### 本番環境
 テスト用アカウント<br>
-emailアドレス:test@test<br>
-パスワード:tttttttt(tを8回)<br>
+emailアドレス:test@test.com<br>
+パスワード:testtest(testを2回)<br>
 
 デモページへ飛びます。<br>
 http://passtimetodo.herokuapp.com/
