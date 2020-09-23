@@ -11,6 +11,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 <body>
+    <title>totoTimer</title>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
