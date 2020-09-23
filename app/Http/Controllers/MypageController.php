@@ -17,12 +17,23 @@ class MypageController extends Controller
         $user = Auth::user()->id;
 
         $targets = Target::with('goals')->where('user_id',$user)->orderByDesc('created_at')->where('complete',0)->get();
-        $created_at = Target::where('user_id',$user)->where('complete',0)->pluck('created_at');
         $targetsCount = $targets->count();
-        return view('mypage/index',compact('newTarget','targets','created_at','targetsCount','newGoal'));
+        
+        return view('mypage/index',compact('newTarget','targets','targetsCount','newGoal'));
     }
 
     public function ajaxRequestPost(Request $request){
+
+
+        $validatedData = $request->validate([
+            'title' => ['required','max:20'],
+            'goal.*' =>['required','max:20'],
+        ],
+        [
+            'required' => '必須入力です',
+            'goal.*.required' => '一つ以上入力してください',
+            'max' => '20文字以内で入力してください'
+        ]);
 
         $target = new Target();
         $user = Auth::user()->id;
@@ -46,10 +57,9 @@ class MypageController extends Controller
         $latestGoals[] = $goal;
         }
 
-        $latestTarget = Target::orderByDesc('created_at')->first();
-        $latestTargetTime = $latestTarget->created_at;
+        $latestTargetTime = $target->created_at;
 
-        return response()->json([$latestTarget,$latestTargetTime,$latestGoals]);
+        return response()->json([$target,$latestTargetTime,$latestGoals]);
     }
     public function ajaxCheckBox(Request $request){
 
@@ -59,10 +69,10 @@ class MypageController extends Controller
         $goal->update();
 
         $targetId = $goal->target_id;
-        $target = Target::find($targetId);
-        $allGoals = Target::with('goals')->find($targetId)->goals->count();
-        $checkedGoals = Target::with('goals')->find($targetId)->goals->where('checked',1)->count();
-        $target->archievement = 100*$checkedGoals/$allGoals;
+        $target = Target::with('goals')->find($targetId);
+        $allGoals = $target->goals->count();
+        $checkedGoals = $target->goals->where('checked',1)->count();
+        $target->archievement = floor(100*$checkedGoals/$allGoals);
         $target->confirmation = $target->archievement==100 ? 1:0;
         $target->update();
 

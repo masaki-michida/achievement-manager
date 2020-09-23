@@ -94,6 +94,7 @@
         </style>
     </head>
     <body>
+    <title>todoTimer</title>
     <div>
             @if (Route::has('login'))
                 <div class="links">
