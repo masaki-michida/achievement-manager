@@ -8,7 +8,7 @@ jobs:
     docker:
       # Specify the version you desire here
       - image: circleci/php:7.4-node-browsers
-      - image: circleci/mysql:5.6
+      - image: circleci/mysql:8.0
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -51,6 +51,8 @@ jobs:
 
       # prepare the database
       - run: touch storage/testing.mysql
+      - run: php artisan config:cache
+      - run: php artisan config:clear
       - run: php artisan migrate --env=testing --database=mysql --force
 
       # run tests with phpunit or codecept
