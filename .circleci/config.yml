@@ -54,5 +54,4 @@ jobs:
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
-      - run: ./vendor/bin/phpunit build
       - run: ./vendor/bin/phpunit run
