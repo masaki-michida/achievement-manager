@@ -17,7 +17,7 @@ jobs:
       - APP_KEY: base64:En0mtJtIRh+A7Fb+J2oaFDQoKO6VaGvlnxcwDilv4Xk=
       - DB_CONNECTION: mysql
       - MYSQL_USER: root
-      - MYSQL_ROOT_HOST: %
+      - MYSQL_ROOT_HOST: '%'
       - MYSQL_ALLOW_EMPTY_PASSWORD: true
 
       # Specify service dependencies here if necessary
