@@ -9,16 +9,11 @@ jobs:
       # Specify the version you desire here
       - image: circleci/php:7.4-apache-node-browsers
       - image: circleci/mysql:5.6
-    
-    environment:
-      - APP_DEBUG: true
-      - APP_ENV: testing
-      - MYSQL_DATABASE: circle_test
-      - APP_KEY: base64:En0mtJtIRh+A7Fb+J2oaFDQoKO6VaGvlnxcwDilv4Xk=
-      - DB_CONNECTION: mysql
-      - MYSQL_USER: root
-      - MYSQL_ROOT_HOST: '%'
-      - MYSQL_ALLOW_EMPTY_PASSWORD: true
+
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_DATABASE: achievement
+          MYSQL_USER: root
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
